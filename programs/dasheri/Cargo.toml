@@ -22,10 +22,11 @@ anchor-lang = "0.19.0"
 solana-program = "^1.8.1"
 anchor-spl = "0.19.0"
 spl-token = { version = "3.1.1", features = ["no-entrypoint"] }
-#mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features=false, features = ["no-entrypoint"], branch="v3.3.0" }
-#mango-common = { git = "https://github.com/blockworks-foundation/mango-v3.git", branch="v3.3.0" }
-mango = { path = "../../../mango-v3/program", default-features=false, features = ["no-entrypoint"]}
-mango-common = { path = "../../../mango-v3/common" }
+mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features=false, features = ["no-entrypoint"], branch="v3.3.0" }
+mango-common = { git = "https://github.com/blockworks-foundation/mango-v3.git", branch="v3.3.0" }
+# flip to locally work with local changes
+# mango = { path = "../../../mango-v3/program", default-features=false, features = ["no-entrypoint"]}
+# mango-common = { path = "../../../mango-v3/common" }
 arrayref = "^0.3.6"
 serde = "^1.0.118"
 bs58 = "0.4.0"
