@@ -19,7 +19,7 @@ pub struct CreateMangoAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn create_mango_account(ctx: Context<CreateMangoAccount>, account_num: u64) -> ProgramResult {
+pub fn handler(ctx: Context<CreateMangoAccount>, account_num: u64) -> ProgramResult {
     let instruction = instruction::create_mango_account(
         ctx.accounts.mango_program_ai.key,
         ctx.accounts.mango_group.to_account_info().key,
