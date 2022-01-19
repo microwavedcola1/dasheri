@@ -19,7 +19,7 @@ pub mod dasheri {
         instructions::create_mango_account::handler(ctx, account_num)
     }
 
-    pub fn deposit(ctx: Context<Deposit>) -> ProgramResult {
-        instructions::deposit::handler(ctx)
+    pub fn deposit(ctx: Context<Deposit>, quantity: u64) -> ProgramResult {
+        instructions::deposit::handler(ctx, quantity)
     }
 }

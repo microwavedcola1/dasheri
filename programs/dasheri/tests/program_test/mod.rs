@@ -22,12 +22,12 @@ pub mod solana;
 pub mod utils;
 
 // Flip for debugging
-// const RUST_LOG_DEFAULT: &str = "debug";
-const RUST_LOG_DEFAULT: &str = "solana_rbpf::vm=info,\
-             solana_program_runtime::stable_log=debug,\
-             solana_runtime::message_processor=debug,\
-             solana_runtime::system_instruction_processor=info,\
-             solana_program_test=info";
+const RUST_LOG_DEFAULT: &str = "debug";
+// const RUST_LOG_DEFAULT: &str = "solana_rbpf::vm=info,\
+//              solana_program_runtime::stable_log=debug,\
+//              solana_runtime::message_processor=debug,\
+//              solana_runtime::system_instruction_processor=info,\
+//              solana_program_test=info";
 
 trait AddPacked {
     fn add_packable_account<T: Pack>(

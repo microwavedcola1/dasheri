@@ -5,7 +5,7 @@ use solana_program::program::invoke;
 #[derive(Accounts)]
 #[instruction(account_num: u64)]
 pub struct CreateMangoAccount<'info> {
-    pub mango_program_ai: AccountInfo<'info>,
+    pub mango_program: AccountInfo<'info>,
 
     #[account(mut)]
     pub mango_group: AccountInfo<'info>,
@@ -21,7 +21,7 @@ pub struct CreateMangoAccount<'info> {
 
 pub fn handler(ctx: Context<CreateMangoAccount>, account_num: u64) -> ProgramResult {
     let instruction = instruction::create_mango_account(
-        ctx.accounts.mango_program_ai.key,
+        ctx.accounts.mango_program.key,
         ctx.accounts.mango_group.to_account_info().key,
         ctx.accounts.mango_account.to_account_info().key,
         ctx.accounts.owner.to_account_info().key,
@@ -33,7 +33,7 @@ pub fn handler(ctx: Context<CreateMangoAccount>, account_num: u64) -> ProgramRes
     invoke(
         &instruction,
         &[
-            ctx.accounts.mango_program_ai.to_account_info().clone(),
+            ctx.accounts.mango_program.to_account_info().clone(),
             ctx.accounts.mango_group.to_account_info().clone(),
             ctx.accounts.mango_account.to_account_info().clone(),
             ctx.accounts.owner.to_account_info().clone(),
