@@ -14,17 +14,17 @@ pub struct DepositIntoPool<'info> {
     pub pool: Box<Account<'info, Pool>>,
 
     #[account(
-        associated_token::authority = pool,
-        associated_token::mint = pool.deposit_mint,
-    )]
-    pub vault: Box<Account<'info, TokenAccount>>,
-
-    #[account(
         seeds = [b"pool_account".as_ref(), pool.key().as_ref()],
         bump = pool_account.bump,
         constraint = pool_account.owner == payer.key()
     )]
     pub pool_account: Box<Account<'info, PoolAccount>>,
+
+    #[account(
+        associated_token::authority = pool,
+        associated_token::mint = pool.deposit_mint,
+    )]
+    pub vault: Box<Account<'info, TokenAccount>>,
 
     #[account(
         mut,
