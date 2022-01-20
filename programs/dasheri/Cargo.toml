@@ -18,12 +18,12 @@ default = []
 test-bpf = []
 
 [dependencies]
-anchor-lang = { version = "0.20.1", features = ["anchor-debug"] }
-anchor-spl = { version = "0.20.1" }
+anchor-lang = "0.20.1"
+anchor-spl = "0.20.1"
 solana-program = "^1.8.5"
 spl-token = { version = "3.1.1", features = ["no-entrypoint"] }
-mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features = false, features = ["no-entrypoint"], branch = "main" }
-mango-common = { git = "https://github.com/blockworks-foundation/mango-v3.git", branch = "main" }
+mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features=false, features = ["no-entrypoint"], branch="main" }
+mango-common = { git = "https://github.com/blockworks-foundation/mango-v3.git", branch="main" }
 static_assertions = "1.1"
 
 [dev-dependencies]
@@ -33,7 +33,7 @@ solana-logger = "^1.8.5"
 bytemuck = "^1.7.2"
 fixed = { version = "=1.9.0", features = ["serde"] }
 fixed-macro = "^1.1.1"
-serum_dex = { version = "0.4.0", git = "https://github.com/blockworks-foundation/serum-dex.git", default-features = false, features = ["no-entrypoint", "program"] }
+serum_dex = { version = "0.4.0", git = "https://github.com/blockworks-foundation/serum-dex.git", default-features=false, features = ["no-entrypoint", "program"] }
 bincode = "^1.3.1"
 serde = "^1.0.118"
 spl-associated-token-account = { version = "^1.0.3", features = ["no-entrypoint"] }
