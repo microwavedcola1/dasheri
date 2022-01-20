@@ -15,6 +15,19 @@ extern crate static_assertions;
 #[program]
 pub mod dasheri {
     use super::*;
+    use anchor_spl::associated_token::Create;
+
+    pub fn create_pool(ctx: Context<CreatePool>, bump: u8) -> ProgramResult {
+        instructions::create_pool::handler(ctx, bump)
+    }
+
+    pub fn create_pool_account(ctx: Context<CreatePoolAccount>, bump: u8) -> ProgramResult {
+        instructions::create_pool_account::handler(ctx, bump)
+    }
+
+    pub fn deposit_into_pool(ctx: Context<DepositIntoPool>, amount: u64) -> ProgramResult {
+        instructions::deposit_into_pool::handler(ctx, amount)
+    }
 
     pub fn create_mango_account(
         ctx: Context<CreateMangoAccount>,
