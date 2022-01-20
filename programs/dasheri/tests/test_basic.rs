@@ -31,15 +31,16 @@ async fn test_basic() {
         &[b"pool".as_ref(), test.context.payer.pubkey().as_ref()],
         &test.dasheri_program_id,
     );
+    let vault = spl_associated_token_account::get_associated_token_address(
+        &pool,
+        &test.mints[test.mints.len() - 1].pubkey.unwrap(),
+    );
     let instructions = vec![Instruction {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::CreatePool {
                 pool,
-                vault: spl_associated_token_account::get_associated_token_address(
-                    &pool,
-                    &test.mints[test.mints.len() - 1].pubkey.unwrap(),
-                ),
+                vault,
                 deposit_mint: test.mints[test.mints.len() - 1].pubkey.unwrap(),
                 payer: test.context.payer.pubkey(),
                 system_program: solana_sdk::system_program::id(),
@@ -65,9 +66,9 @@ async fn test_basic() {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::CreatePoolAccount {
-                pool_account: pool_account,
+                pool_account,
                 pool,
-                payer: test.context.payer.pubkey(),
+                payer: test.users[0].pubkey(),
                 system_program: solana_sdk::system_program::id(),
             },
             None,
@@ -75,9 +76,40 @@ async fn test_basic() {
         data: anchor_lang::InstructionData::data(&dasheri::instruction::CreatePoolAccount { bump }),
     }];
 
-    test.process_transaction(&instructions, Some(&[]))
-        .await
-        .unwrap();
+    test.process_transaction(
+        &instructions,
+        Some(&[&Keypair::from_base58_string(
+            &test.users[0].to_base58_string(),
+        )]),
+    );
+
+    // Deposit into pool
+    let instructions = vec![Instruction {
+        program_id: test.dasheri_program_id,
+        accounts: anchor_lang::ToAccountMetas::to_account_metas(
+            &dasheri::accounts::DepositIntoPool {
+                pool,
+                vault,
+                pool_account,
+                deposit_token: test.token_accounts[test.mints.len() - 1].key(),
+                payer: test.users[0].pubkey(),
+                token_program: spl_token::id(),
+            },
+            None,
+        ),
+        data: anchor_lang::InstructionData::data(&dasheri::instruction::DepositIntoPool {
+            amount: 100,
+        }),
+    }];
+
+    test.process_transaction(
+        &instructions,
+        Some(&[&Keypair::from_base58_string(
+            &test.users[0].to_base58_string(),
+        )]),
+    );
+
+    // ------------------------------------------------------------
 
     // Create mango account
     const ACCOUNT_NUM: u64 = 0_u64;
