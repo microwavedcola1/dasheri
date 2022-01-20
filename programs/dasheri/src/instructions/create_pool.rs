@@ -25,9 +25,10 @@ pub struct CreatePool<'info> {
     )]
     pub vault: Box<Account<'info, TokenAccount>>,
 
-    #[account(
-        constraint = deposit_mint.key() == usdc_token::ID
-    )]
+    // todo: enable
+    // #[account(
+    //     constraint = deposit_mint.key() == usdc_token::ID
+    // )]
     pub deposit_mint: Box<Account<'info, Mint>>,
 
     #[account(mut)]

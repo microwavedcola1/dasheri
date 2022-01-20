@@ -26,6 +26,36 @@ async fn test_basic() {
     )
     .await;
 
+    // Create pool
+    let (pool, bump) = Pubkey::find_program_address(
+        &[b"pool".as_ref(), test.context.payer.pubkey().as_ref()],
+        &test.dasheri_program_id,
+    );
+    let instructions = vec![Instruction {
+        program_id: test.dasheri_program_id,
+        accounts: anchor_lang::ToAccountMetas::to_account_metas(
+            &dasheri::accounts::CreatePool {
+                pool: pool,
+                vault: spl_associated_token_account::get_associated_token_address(
+                    &pool,
+                    &test.mints[test.mints.len() - 1].pubkey.unwrap(),
+                ),
+                deposit_mint: test.mints[test.mints.len() - 1].pubkey.unwrap(),
+                payer: test.context.payer.pubkey(),
+                system_program: solana_sdk::system_program::id(),
+                token_program: spl_token::id(),
+                associated_token_program: spl_associated_token_account::id(),
+                rent: solana_sdk::sysvar::rent::id(),
+            },
+            None,
+        ),
+        data: anchor_lang::InstructionData::data(&dasheri::instruction::CreatePool { bump }),
+    }];
+
+    test.process_transaction(&instructions, Some(&[]))
+        .await
+        .unwrap();
+
     // Create mango account
     const ACCOUNT_NUM: u64 = 0_u64;
     let (mango_account, _) = Pubkey::find_program_address(
