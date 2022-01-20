@@ -76,7 +76,7 @@ async fn test_basic() {
     let instructions = vec![Instruction {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
-            &dasheri::accounts::Deposit {
+            &dasheri::accounts::DepositIntoMangoAccount {
                 mango_program: test.mango_program_id,
                 mango_group: mango_group_cookie.address,
                 mango_cache: mango_group.mango_cache.key(),
