@@ -1,12 +1,16 @@
 use anchor_lang::prelude::*;
 
+use instructions::*;
+
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
 pub mod error;
+pub mod ids;
 pub mod instructions;
 pub mod state;
 
-use instructions::*;
+#[macro_use]
+extern crate static_assertions;
 
 #[program]
 pub mod dasheri {

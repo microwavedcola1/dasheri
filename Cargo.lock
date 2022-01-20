@@ -693,6 +693,7 @@ dependencies = [
  "solana-program-test",
  "solana-sdk",
  "spl-token",
+ "static_assertions",
 ]
 
 [[package]]
