@@ -24,6 +24,6 @@ pub mod dasheri {
     }
 
     pub fn deposit(ctx: Context<Deposit>, quantity: u64) -> ProgramResult {
-        instructions::deposit::handler(ctx, quantity)
+        instructions::deposit_into_mango_account::handler(ctx, quantity)
     }
 }
