@@ -4,7 +4,7 @@ use mango::instruction;
 use solana_program::program::invoke;
 
 #[derive(Accounts)]
-pub struct Deposit<'info> {
+pub struct DepositIntoMangoAccount<'info> {
     pub mango_program: UncheckedAccount<'info>,
 
     pub mango_group: UncheckedAccount<'info>,
@@ -32,7 +32,7 @@ pub struct Deposit<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<Deposit>, quantity: u64) -> ProgramResult {
+pub fn handler(ctx: Context<DepositIntoMangoAccount>, quantity: u64) -> ProgramResult {
     let instruction = instruction::deposit(
         &ctx.accounts.mango_program.key(),
         &ctx.accounts.mango_group.key(),
