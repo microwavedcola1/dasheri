@@ -6,12 +6,12 @@ use crate::ids::usdc_token;
 use crate::state::Pool;
 
 #[derive(Accounts)]
-#[instruction(pool_bump: u8)]
+#[instruction(bump: u8)]
 pub struct CreatePool<'info> {
     #[account(
         init,
         seeds = [b"pool".as_ref(), payer.key().as_ref()],
-        bump = pool_bump,
+        bump = bump,
         payer = payer,
         space = 8 + std::mem::size_of::<Pool>(),
     )]
@@ -39,9 +39,12 @@ pub struct CreatePool<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-pub fn handler(ctx: Context<CreatePool>) -> ProgramResult {
+pub fn handler(ctx: Context<CreatePool>, bump: u8) -> ProgramResult {
     let pool = &mut ctx.accounts.pool;
+    pool.bump = bump;
+    pool.deposit_mint = ctx.accounts.deposit_mint.key();
     pool.vault = ctx.accounts.vault.key();
+    pool.admin = ctx.accounts.payer.key();
 
     Ok(())
 }
