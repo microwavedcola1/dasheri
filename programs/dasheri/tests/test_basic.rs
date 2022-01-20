@@ -35,7 +35,7 @@ async fn test_basic() {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::CreatePool {
-                pool: pool,
+                pool,
                 vault: spl_associated_token_account::get_associated_token_address(
                     &pool,
                     &test.mints[test.mints.len() - 1].pubkey.unwrap(),
@@ -50,6 +50,29 @@ async fn test_basic() {
             None,
         ),
         data: anchor_lang::InstructionData::data(&dasheri::instruction::CreatePool { bump }),
+    }];
+
+    test.process_transaction(&instructions, Some(&[]))
+        .await
+        .unwrap();
+
+    // Create pool account
+    let (pool_account, bump) = Pubkey::find_program_address(
+        &[b"pool_account".as_ref(), pool.as_ref()],
+        &test.dasheri_program_id,
+    );
+    let instructions = vec![Instruction {
+        program_id: test.dasheri_program_id,
+        accounts: anchor_lang::ToAccountMetas::to_account_metas(
+            &dasheri::accounts::CreatePoolAccount {
+                pool_account: pool_account,
+                pool,
+                payer: test.context.payer.pubkey(),
+                system_program: solana_sdk::system_program::id(),
+            },
+            None,
+        ),
+        data: anchor_lang::InstructionData::data(&dasheri::instruction::CreatePoolAccount { bump }),
     }];
 
     test.process_transaction(&instructions, Some(&[]))
