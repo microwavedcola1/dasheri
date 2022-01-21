@@ -1,0 +1,1 @@
+* clear out payer, signer, owner fields in all contexts
