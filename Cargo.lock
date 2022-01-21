@@ -1531,7 +1531,7 @@ dependencies = [
 [[package]]
 name = "mango"
 version = "3.3.1"
-source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=main#b3e909aaec421c33c5fe6406d6a87ca9c3dea752"
+source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=ckamm/payer-for-pda#8b921b93f752adda9dbee2414f40257fd41c6c96"
 dependencies = [
  "anchor-lang",
  "arrayref",
@@ -1558,7 +1558,7 @@ dependencies = [
 [[package]]
 name = "mango-common"
 version = "3.0.0"
-source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=main#b3e909aaec421c33c5fe6406d6a87ca9c3dea752"
+source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=ckamm/payer-for-pda#8b921b93f752adda9dbee2414f40257fd41c6c96"
 dependencies = [
  "bytemuck",
  "solana-program",
@@ -1567,7 +1567,7 @@ dependencies = [
 [[package]]
 name = "mango-logs"
 version = "0.1.0"
-source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=main#b3e909aaec421c33c5fe6406d6a87ca9c3dea752"
+source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=ckamm/payer-for-pda#8b921b93f752adda9dbee2414f40257fd41c6c96"
 dependencies = [
  "anchor-lang",
 ]
@@ -1575,7 +1575,7 @@ dependencies = [
 [[package]]
 name = "mango-macro"
 version = "3.0.0"
-source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=main#b3e909aaec421c33c5fe6406d6a87ca9c3dea752"
+source = "git+https://github.com/blockworks-foundation/mango-v3.git?branch=ckamm/payer-for-pda#8b921b93f752adda9dbee2414f40257fd41c6c96"
 dependencies = [
  "bytemuck",
  "mango-common",
