@@ -1,6 +1,7 @@
+use crate::state::Pool;
 use anchor_lang::prelude::*;
 use mango::instruction;
-use solana_program::program::invoke;
+use solana_program::program::{invoke, invoke_signed};
 
 #[derive(Accounts)]
 #[instruction(account_num: u64)]
@@ -13,8 +14,15 @@ pub struct CreateMangoAccount<'info> {
     #[account(mut)]
     pub mango_account: AccountInfo<'info>,
 
+    #[account(
+        mut,
+        seeds = [b"pool".as_ref(), pool.admin.key().as_ref()],
+        bump = pool.bump,
+    )]
+    pub pool: Box<Account<'info, Pool>>,
+
     #[account(mut)]
-    pub owner: Signer<'info>,
+    pub payer: Signer<'info>,
 
     pub system_program: Program<'info, System>,
 }
@@ -24,21 +32,28 @@ pub fn handler(ctx: Context<CreateMangoAccount>, account_num: u64) -> ProgramRes
         ctx.accounts.mango_program.key,
         ctx.accounts.mango_group.to_account_info().key,
         ctx.accounts.mango_account.to_account_info().key,
-        ctx.accounts.owner.to_account_info().key,
+        ctx.accounts.pool.to_account_info().key,
         ctx.accounts.system_program.to_account_info().key,
         account_num,
     )
     .unwrap();
 
-    invoke(
+    let pool_admin_key = &ctx.accounts.pool.admin.key();
+    let seeds = &[
+        b"pool".as_ref(),
+        pool_admin_key.as_ref(),
+        &[ctx.accounts.pool.bump],
+    ];
+    invoke_signed(
         &instruction,
         &[
             ctx.accounts.mango_program.to_account_info().clone(),
             ctx.accounts.mango_group.to_account_info().clone(),
             ctx.accounts.mango_account.to_account_info().clone(),
-            ctx.accounts.owner.to_account_info().clone(),
+            ctx.accounts.pool.to_account_info().clone(),
             ctx.accounts.system_program.to_account_info().clone(),
         ],
+        &[&seeds[..]],
     )?;
 
     Ok(())
