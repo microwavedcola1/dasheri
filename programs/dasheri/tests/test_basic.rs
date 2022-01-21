@@ -109,14 +109,12 @@ async fn test_basic() {
         )]),
     );
 
-    // ------------------------------------------------------------
-
     // Create mango account
     const ACCOUNT_NUM: u64 = 0_u64;
-    let (mango_account, _) = Pubkey::find_program_address(
+    let (mango_account, bump) = Pubkey::find_program_address(
         &[
             &mango_group_cookie.address.as_ref(),
-            &test.context.payer.pubkey().as_ref(),
+            &pool.as_ref(),
             &ACCOUNT_NUM.to_le_bytes(),
         ],
         &test.mango_program_id,
@@ -136,6 +134,7 @@ async fn test_basic() {
         ),
         data: anchor_lang::InstructionData::data(&dasheri::instruction::CreateMangoAccount {
             account_num: ACCOUNT_NUM,
+            bump,
         }),
     }];
     test.process_transaction(&instructions, Some(&[]))

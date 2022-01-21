@@ -18,12 +18,12 @@ default = []
 test-bpf = []
 
 [dependencies]
-anchor-lang = "0.20.1"
-anchor-spl = "0.20.1"
+anchor-lang = "^0.20.1"
+anchor-spl = "^0.20.1"
 solana-program = "^1.8.5"
 spl-token = { version = "3.1.1", features = ["no-entrypoint"] }
-mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features=false, features = ["no-entrypoint"], branch="main" }
-mango-common = { git = "https://github.com/blockworks-foundation/mango-v3.git", branch="main" }
+mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features=false, features = ["no-entrypoint"], branch="ckamm/payer-for-pda" }
+mango-common = { git = "https://github.com/blockworks-foundation/mango-v3.git", branch="ckamm/payer-for-pda" }
 static_assertions = "1.1"
 
 [dev-dependencies]

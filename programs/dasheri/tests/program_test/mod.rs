@@ -37,7 +37,6 @@ use self::cookies::*;
 const RUST_LOG_DEFAULT: &str = "solana_rbpf::vm=info,\
              solana_program_runtime::stable_log=debug,\
              solana_runtime::message_processor=debug,\
-             solana_runtime::bank=debug,\
              solana_runtime::system_instruction_processor=info,\
              solana_program_test=info";
 // const RUST_LOG_DEFAULT: &str = "debug";
@@ -1104,6 +1103,7 @@ impl MangoProgramTest {
             &open_orders_pk,
             &mango_group.spot_markets[market_index].spot_market,
             &mango_group.signer_key,
+            &self.users[user_index].pubkey(),
         )
         .unwrap();
 
