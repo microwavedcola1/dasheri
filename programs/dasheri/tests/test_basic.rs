@@ -177,7 +177,8 @@ async fn test_basic() {
                 node_bank_vault: node_bank.vault.key(),
                 owner_token_account: vault,
                 mango_account: mango_account,
-                owner: test.users[0].pubkey(),
+                pool: pool,
+                // owner: test.users[0].pubkey(),
                 system_program: solana_sdk::system_program::id(),
                 token_program: spl_token::id(),
             },
@@ -185,12 +186,7 @@ async fn test_basic() {
         ),
         data: anchor_lang::InstructionData::data(&dasheri::instruction::Deposit { quantity: 100 }),
     }];
-    test.process_transaction(
-        &instructions,
-        Some(&[&Keypair::from_base58_string(
-            &test.users[0].to_base58_string(),
-        )]),
-    )
-    .await
-    .unwrap();
+    test.process_transaction(&instructions, Some(&[]))
+        .await
+        .unwrap();
 }
