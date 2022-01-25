@@ -35,12 +35,63 @@ async fn test_basic() {
         &pool,
         &test.mints[test.mints.len() - 1].pubkey.unwrap(),
     );
+    create_pool(&mut test, &pool, bump, &vault).await;
+
+    // Create pool account
+    let (pool_account, bump) = Pubkey::find_program_address(
+        &[b"pool_account".as_ref(), pool.as_ref()],
+        &test.dasheri_program_id,
+    );
+    create_pool_account(&mut test, &pool, &pool_account, bump).await;
+
+    // Deposit into pool
+    deposit_into_pool(&mut test, &pool, &vault, &pool_account).await;
+
+    // Create mango account
+    const ACCOUNT_NUM: u64 = 0_u64;
+    let (mango_account, bump) = Pubkey::find_program_address(
+        &[
+            &mango_group_cookie.address.as_ref(),
+            &pool.as_ref(),
+            &ACCOUNT_NUM.to_le_bytes(),
+        ],
+        &test.mango_program_id,
+    );
+    create_mango_account(
+        &mut test,
+        &mut mango_group_cookie,
+        &pool,
+        &mango_account,
+        bump,
+        ACCOUNT_NUM,
+    )
+    .await;
+
+    // Update cache
+    mango_group_cookie.run_keeper(&mut test).await;
+
+    // Deposit
+    let mango_group = test
+        .load_account::<MangoGroup>(mango_group_cookie.address)
+        .await;
+    deposit_into_mango_account(
+        &mut test,
+        &mut mango_group_cookie,
+        &pool,
+        &vault,
+        &mango_account,
+        &mango_group,
+    )
+    .await;
+}
+
+async fn create_pool(test: &mut MangoProgramTest, pool: &Pubkey, bump: u8, vault: &Pubkey) {
     let instructions = vec![Instruction {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::CreatePool {
-                pool,
-                vault,
+                pool: *pool,
+                vault: *vault,
                 deposit_mint: test.mints[test.mints.len() - 1].pubkey.unwrap(),
                 payer: test.context.payer.pubkey(),
                 system_program: solana_sdk::system_program::id(),
@@ -56,18 +107,20 @@ async fn test_basic() {
     test.process_transaction(&instructions, Some(&[]))
         .await
         .unwrap();
+}
 
-    // Create pool account
-    let (pool_account, bump) = Pubkey::find_program_address(
-        &[b"pool_account".as_ref(), pool.as_ref()],
-        &test.dasheri_program_id,
-    );
+async fn create_pool_account(
+    test: &mut MangoProgramTest,
+    pool: &Pubkey,
+    pool_account: &Pubkey,
+    bump: u8,
+) {
     let instructions = vec![Instruction {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::CreatePoolAccount {
-                pool_account,
-                pool,
+                pool_account: *pool_account,
+                pool: *pool,
                 payer: test.users[0].pubkey(),
                 system_program: solana_sdk::system_program::id(),
             },
@@ -84,15 +137,21 @@ async fn test_basic() {
     )
     .await
     .unwrap();
+}
 
-    // Deposit into pool
+async fn deposit_into_pool(
+    test: &mut MangoProgramTest,
+    pool: &Pubkey,
+    vault: &Pubkey,
+    pool_account: &Pubkey,
+) {
     let instructions = vec![Instruction {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::DepositIntoPool {
-                pool,
-                vault,
-                pool_account,
+                pool: *pool,
+                vault: *vault,
+                pool_account: *pool_account,
                 deposit_token: test.token_accounts[15].key(),
                 payer: test.users[0].pubkey(),
                 token_program: spl_token::id(),
@@ -103,7 +162,6 @@ async fn test_basic() {
             amount: 100_000_000,
         }),
     }];
-    let vault_balance = test.get_token_balance(vault).await;
     test.process_transaction(
         &instructions,
         Some(&[&Keypair::from_base58_string(
@@ -112,28 +170,24 @@ async fn test_basic() {
     )
     .await
     .unwrap();
-    println!("vault {:?}", vault);
-    println!("vault_balance {:?}", vault_balance);
-    // assert_eq!(1, 2);
+}
 
-    // Create mango account
-    const ACCOUNT_NUM: u64 = 0_u64;
-    let (mango_account, bump) = Pubkey::find_program_address(
-        &[
-            &mango_group_cookie.address.as_ref(),
-            &pool.as_ref(),
-            &ACCOUNT_NUM.to_le_bytes(),
-        ],
-        &test.mango_program_id,
-    );
+async fn create_mango_account(
+    test: &mut MangoProgramTest,
+    mango_group_cookie: &mut MangoGroupCookie,
+    pool: &Pubkey,
+    mango_account: &Pubkey,
+    bump: u8,
+    ACCOUNT_NUM: u64,
+) {
     let instructions = vec![Instruction {
         program_id: test.dasheri_program_id,
         accounts: anchor_lang::ToAccountMetas::to_account_metas(
             &dasheri::accounts::CreateMangoAccount {
                 mango_program: test.mango_program_id,
                 mango_group: mango_group_cookie.address,
-                mango_account: mango_account,
-                pool,
+                mango_account: *mango_account,
+                pool: *pool,
                 payer: test.context.payer.pubkey(),
                 system_program: solana_sdk::system_program::id(),
             },
@@ -147,19 +201,16 @@ async fn test_basic() {
     test.process_transaction(&instructions, Some(&[]))
         .await
         .unwrap();
+}
 
-    // Update cache
-    mango_group_cookie.run_keeper(&mut test).await;
-
-    // Deposit
-    let test_quote_mint_index = test.mints.len() - 1;
-    let mango_group = test
-        .load_account::<MangoGroup>(mango_group_cookie.address)
-        .await;
-    println!(
-        "mango_group.tokens[test_quote_mint_index].root_bank {:?}",
-        mango_group.tokens[QUOTE_INDEX].root_bank
-    );
+async fn deposit_into_mango_account(
+    test: &mut MangoProgramTest,
+    mango_group_cookie: &mut MangoGroupCookie,
+    pool: &Pubkey,
+    vault: &Pubkey,
+    mango_account: &Pubkey,
+    mango_group: &MangoGroup,
+) {
     let root_bank_pk = mango_group.tokens[QUOTE_INDEX].root_bank;
     let root_bank = test.load_account::<RootBank>(root_bank_pk).await;
     let node_bank_pk = root_bank.node_banks[0];
@@ -175,10 +226,9 @@ async fn test_basic() {
                 root_bank: root_bank_pk,
                 node_bank: node_bank_pk,
                 node_bank_vault: node_bank.vault.key(),
-                owner_token_account: vault,
-                mango_account: mango_account,
-                pool: pool,
-                // owner: test.users[0].pubkey(),
+                owner_token_account: *vault,
+                mango_account: *mango_account,
+                pool: *pool,
                 system_program: solana_sdk::system_program::id(),
                 token_program: spl_token::id(),
             },
