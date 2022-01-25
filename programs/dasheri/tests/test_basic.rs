@@ -81,7 +81,9 @@ async fn test_basic() {
         Some(&[&Keypair::from_base58_string(
             &test.users[0].to_base58_string(),
         )]),
-    );
+    )
+    .await
+    .unwrap();
 
     // Deposit into pool
     let instructions = vec![Instruction {
@@ -91,23 +93,28 @@ async fn test_basic() {
                 pool,
                 vault,
                 pool_account,
-                deposit_token: test.token_accounts[test.mints.len() - 1].key(),
+                deposit_token: test.token_accounts[15].key(),
                 payer: test.users[0].pubkey(),
                 token_program: spl_token::id(),
             },
             None,
         ),
         data: anchor_lang::InstructionData::data(&dasheri::instruction::DepositIntoPool {
-            amount: 100,
+            amount: 100_000_000,
         }),
     }];
-
+    let vault_balance = test.get_token_balance(vault).await;
     test.process_transaction(
         &instructions,
         Some(&[&Keypair::from_base58_string(
             &test.users[0].to_base58_string(),
         )]),
-    );
+    )
+    .await
+    .unwrap();
+    println!("vault {:?}", vault);
+    println!("vault_balance {:?}", vault_balance);
+    // assert_eq!(1, 2);
 
     // Create mango account
     const ACCOUNT_NUM: u64 = 0_u64;
@@ -168,7 +175,7 @@ async fn test_basic() {
                 root_bank: root_bank_pk,
                 node_bank: node_bank_pk,
                 node_bank_vault: node_bank.vault.key(),
-                owner_token_account: test.token_accounts[test_quote_mint_index].key(),
+                owner_token_account: vault,
                 mango_account: mango_account,
                 owner: test.users[0].pubkey(),
                 system_program: solana_sdk::system_program::id(),

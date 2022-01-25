@@ -21,6 +21,7 @@ pub struct DepositIntoPool<'info> {
     pub pool_account: Box<Account<'info, PoolAccount>>,
 
     #[account(
+        mut,
         associated_token::authority = pool,
         associated_token::mint = pool.deposit_mint,
     )]
@@ -51,6 +52,9 @@ impl<'info> DepositIntoPool<'info> {
 }
 
 pub fn handler(ctx: Context<DepositIntoPool>, amount: u64) -> ProgramResult {
+    msg!("vault {:?}", ctx.accounts.vault.key());
+    msg!("amount {:?}", amount);
+
     token::transfer(ctx.accounts.transfer_ctx(), amount)?;
 
     Ok(())
