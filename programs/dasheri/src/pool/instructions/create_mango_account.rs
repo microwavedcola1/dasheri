@@ -1,8 +1,7 @@
-use crate::pool::Pool;
+use crate::pool::state::Pool;
 use anchor_lang::prelude::*;
 use mango::instruction;
-use mango::state::MangoAccount;
-use solana_program::program::{invoke, invoke_signed};
+use solana_program::program::invoke_signed;
 
 #[derive(Accounts)]
 #[instruction(account_num: u64, bump: u8)]

@@ -1,10 +1,8 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token;
 use anchor_spl::token::{Token, TokenAccount};
-use mango::instruction;
-use solana_program::program::invoke;
 
-use crate::pool::{Pool, PoolAccount};
+use crate::pool::state::{Pool, PoolAccount};
 
 #[derive(Accounts)]
 pub struct DepositIntoPool<'info> {

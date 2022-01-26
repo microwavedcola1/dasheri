@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::Token;
 use mango::instruction;
-use solana_program::program::{invoke, invoke_signed};
+use solana_program::program::invoke_signed;
 
-use crate::pool::Pool;
+use crate::pool::state::Pool;
 
 #[derive(Accounts)]
 pub struct DepositIntoMangoAccount<'info> {
