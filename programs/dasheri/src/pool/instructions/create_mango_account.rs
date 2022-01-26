@@ -1,4 +1,4 @@
-use crate::state::Pool;
+use crate::pool::Pool;
 use anchor_lang::prelude::*;
 use mango::instruction;
 use mango::state::MangoAccount;

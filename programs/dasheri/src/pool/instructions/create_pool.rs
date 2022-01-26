@@ -1,9 +1,7 @@
+use crate::pool::Pool;
 use anchor_lang::prelude::*;
 use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token::{Mint, Token, TokenAccount};
-
-use crate::ids::usdc_token;
-use crate::state::Pool;
 
 #[derive(Accounts)]
 #[instruction(bump: u8)]

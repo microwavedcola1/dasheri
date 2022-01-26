@@ -1,9 +1,10 @@
-use crate::state::{Pool, PoolAccount};
 use anchor_lang::prelude::*;
 use anchor_spl::token;
 use anchor_spl::token::{Token, TokenAccount};
 use mango::instruction;
 use solana_program::program::invoke;
+
+use crate::pool::{Pool, PoolAccount};
 
 #[derive(Accounts)]
 pub struct DepositIntoPool<'info> {
@@ -52,9 +53,6 @@ impl<'info> DepositIntoPool<'info> {
 }
 
 pub fn handler(ctx: Context<DepositIntoPool>, amount: u64) -> ProgramResult {
-    msg!("vault {:?}", ctx.accounts.vault.key());
-    msg!("amount {:?}", amount);
-
     token::transfer(ctx.accounts.transfer_ctx(), amount)?;
 
     Ok(())
