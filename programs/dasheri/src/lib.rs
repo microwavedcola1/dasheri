@@ -3,11 +3,7 @@ extern crate static_assertions;
 
 use anchor_lang::prelude::*;
 
-use pool::instructions::create_mango_account::CreateMangoAccount;
-use pool::instructions::create_pool::CreatePool;
-use pool::instructions::create_pool_account::CreatePoolAccount;
-use pool::instructions::deposit_into_mango_account::DepositIntoMangoAccount;
-use pool::instructions::deposit_into_pool::DepositIntoPool;
+use pool::instructions::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
