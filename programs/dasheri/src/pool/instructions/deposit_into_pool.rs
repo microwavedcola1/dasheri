@@ -21,7 +21,7 @@ pub struct PoolDepositIntoPool<'info> {
     #[account(
         mut,
         associated_token::authority = pool,
-        associated_token::mint = pool.deposit_iou_mint,
+        associated_token::mint = pool.deposit_mint,
     )]
     pub vault: Box<Account<'info, TokenAccount>>,
 

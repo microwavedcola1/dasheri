@@ -11,7 +11,7 @@ use anchor_lang::prelude::*;
 #[derive(Default)]
 pub struct Pool {
     pub bump: u8,
-    pub deposit_iou_mint: Pubkey,
+    pub deposit_mint: Pubkey,
     pub vault: Pubkey,
     pub admin: Pubkey,
     pub padding: [u8; 31],

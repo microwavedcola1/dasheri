@@ -19,7 +19,7 @@ pub struct PoolCreatePool<'info> {
     #[account(
         init,
         associated_token::authority = pool,
-        associated_token::mint = deposit_iou_mint,
+        associated_token::mint = deposit_mint,
         // todo: payer doesnt have to be the admin
         payer = admin
     )]
@@ -27,9 +27,9 @@ pub struct PoolCreatePool<'info> {
 
     // todo: verify that the mint is a specific one you are expecting e.g. usdc
     // #[account(
-    //     constraint = deposit_iou_mint.key() == usdc_token::ID
+    //     constraint = deposit_mint.key() == usdc_token::ID
     // )]
-    pub deposit_iou_mint: Box<Account<'info, Mint>>,
+    pub deposit_mint: Box<Account<'info, Mint>>,
 
     #[account(mut)]
     pub admin: Signer<'info>,
@@ -43,7 +43,7 @@ pub struct PoolCreatePool<'info> {
 pub fn handler(ctx: Context<PoolCreatePool>, bump: u8) -> ProgramResult {
     let pool = &mut ctx.accounts.pool;
     pool.bump = bump;
-    pool.deposit_iou_mint = ctx.accounts.deposit_iou_mint.key();
+    pool.deposit_mint = ctx.accounts.deposit_mint.key();
     pool.vault = ctx.accounts.vault.key();
     pool.admin = ctx.accounts.admin.key();
 

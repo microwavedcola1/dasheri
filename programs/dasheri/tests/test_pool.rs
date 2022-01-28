@@ -96,7 +96,7 @@ async fn create_pool(test: &mut MangoProgramTest, pool: &Pubkey, bump: u8, vault
             &dasheri::accounts::PoolCreatePool {
                 pool: *pool,
                 vault: *vault,
-                deposit_iou_mint: test.mints[test.mints.len() - 1].pubkey.unwrap(),
+                deposit_mint: test.mints[test.mints.len() - 1].pubkey.unwrap(),
                 admin: test.context.payer.pubkey(),
                 system_program: solana_sdk::system_program::id(),
                 token_program: spl_token::id(),
