@@ -1,3 +1,4 @@
+use crate::error::ErrorCode::NotAProgram;
 use crate::pool::state::Pool;
 use anchor_lang::prelude::*;
 use mango::instruction;
@@ -28,6 +29,8 @@ pub struct PoolCreateMangoAccount<'info> {
 }
 
 pub fn handler(ctx: Context<PoolCreateMangoAccount>, account_num: u64, bump: u8) -> ProgramResult {
+    require!(ctx.accounts.mango_program.executable, NotAProgram);
+
     let instruction = instruction::create_mango_account(
         ctx.accounts.mango_program.key,
         ctx.accounts.mango_group.to_account_info().key,

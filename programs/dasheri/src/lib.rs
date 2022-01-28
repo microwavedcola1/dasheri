@@ -2,11 +2,13 @@
 extern crate static_assertions;
 
 use anchor_lang::prelude::*;
+use error::*;
 use iou::instructions::*;
 use pool::instructions::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
+mod error;
 mod ids;
 mod iou;
 mod pool;
