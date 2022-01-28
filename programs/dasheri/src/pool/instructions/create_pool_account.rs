@@ -9,6 +9,7 @@ pub struct PoolCreatePoolAccount<'info> {
         init,
         seeds = [b"pool_account".as_ref(), pool.key().as_ref(), user.key().as_ref()],
         bump = bump,
+        // todo: payer doesnt have to be the user
         payer = user
     )]
     pub pool_account: Box<Account<'info, PoolAccount>>,

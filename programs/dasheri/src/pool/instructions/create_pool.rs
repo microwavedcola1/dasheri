@@ -11,6 +11,7 @@ pub struct PoolCreatePool<'info> {
         init,
         seeds = [b"pool".as_ref(), admin.key().as_ref()],
         bump = bump,
+        // todo: payer doesnt have to be the admin
         payer = admin
     )]
     pub pool: Box<Account<'info, Pool>>,
@@ -19,6 +20,7 @@ pub struct PoolCreatePool<'info> {
         init,
         associated_token::authority = pool,
         associated_token::mint = deposit_iou_mint,
+        // todo: payer doesnt have to be the admin
         payer = admin
     )]
     pub vault: Box<Account<'info, TokenAccount>>,
