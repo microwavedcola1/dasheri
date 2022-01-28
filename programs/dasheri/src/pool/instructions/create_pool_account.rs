@@ -9,8 +9,7 @@ pub struct PoolCreatePoolAccount<'info> {
         init,
         seeds = [b"pool_account".as_ref(), pool.key().as_ref()],
         bump = bump,
-        payer = user,
-        space = 8 + std::mem::size_of::<PoolAccount>(),
+        payer = user
     )]
     pub pool_account: Box<Account<'info, PoolAccount>>,
 

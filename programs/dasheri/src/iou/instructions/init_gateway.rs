@@ -9,8 +9,7 @@ pub struct IouInitGateway<'info> {
         init,
         seeds = [b"gateway".as_ref(), admin.key().as_ref()],
         bump = gateway_bump,
-        payer = admin,
-        space = 8 + std::mem::size_of::<Gateway>(),
+        payer = admin
     )]
     pub gateway: Box<Account<'info, Gateway>>,
 

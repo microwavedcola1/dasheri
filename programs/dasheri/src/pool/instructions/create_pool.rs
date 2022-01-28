@@ -11,8 +11,7 @@ pub struct PoolCreatePool<'info> {
         init,
         seeds = [b"pool".as_ref(), admin.key().as_ref()],
         bump = bump,
-        payer = admin,
-        space = 8 + std::mem::size_of::<Pool>(),
+        payer = admin
     )]
     pub pool: Box<Account<'info, Pool>>,
 
