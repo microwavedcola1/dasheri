@@ -9,7 +9,9 @@ use solana_program::program::invoke;
 
 #[derive(Accounts)]
 pub struct IouDepositIntoMangoAccount<'info> {
+    // todo: check target program key
     pub mango_program: UncheckedAccount<'info>,
+    // todo: check target group key
     pub mango_group: UncheckedAccount<'info>,
     pub mango_cache: UncheckedAccount<'info>,
     pub root_bank: UncheckedAccount<'info>,
@@ -70,6 +72,8 @@ impl<'info> IouDepositIntoMangoAccount<'info> {
 }
 
 pub fn handler(ctx: Context<IouDepositIntoMangoAccount>, quantity: u64) -> ProgramResult {
+    require!(ctx.accounts.mango_program.executable, NotAProgram);
+
     let instruction = instruction::deposit(
         &ctx.accounts.mango_program.key(),
         &ctx.accounts.mango_group.key(),

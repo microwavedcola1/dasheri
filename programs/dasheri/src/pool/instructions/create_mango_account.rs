@@ -7,13 +7,15 @@ use solana_program::program::invoke_signed;
 #[derive(Accounts)]
 #[instruction(account_num: u64, bump: u8)]
 pub struct PoolCreateMangoAccount<'info> {
-    pub mango_program: AccountInfo<'info>,
+    // todo: check target program key
+    pub mango_program: UncheckedAccount<'info>,
+    // todo: check target group key
     #[account(mut)]
-    pub mango_group: AccountInfo<'info>,
+    pub mango_group: UncheckedAccount<'info>,
 
     // Note: seed contraint checkw will be done in mango
     #[account(mut)]
-    pub mango_account: AccountInfo<'info>,
+    pub mango_account: UncheckedAccount<'info>,
 
     #[account(
         mut,
