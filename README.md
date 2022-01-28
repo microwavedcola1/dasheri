@@ -31,3 +31,7 @@ programs
 The point of this anchor project is to serve as a starter kit or example to compose with mango-v3 using anchor. 
 It currently provides 2 examples and various inline todos on how to extend this.
 
+Use cases
+* pool - pooled market making, pooled liquidator which can liquidate other large accounts
+* iou - iou tokens via a gateway to mango's borrowing and lending
+
