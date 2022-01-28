@@ -39,7 +39,11 @@ async fn test_pool() {
 
     // Create pool account
     let (pool_account, bump) = Pubkey::find_program_address(
-        &[b"pool_account".as_ref(), pool.as_ref()],
+        &[
+            b"pool_account".as_ref(),
+            pool.as_ref(),
+            test.users[0].pubkey().as_ref(),
+        ],
         &test.dasheri_program_id,
     );
     create_pool_account(&mut test, &pool, &pool_account, bump).await;

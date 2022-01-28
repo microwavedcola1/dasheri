@@ -12,7 +12,7 @@ pub struct PoolDepositIntoPool<'info> {
     pub pool: Box<Account<'info, Pool>>,
 
     #[account(
-        seeds = [b"pool_account".as_ref(), pool.key().as_ref()],
+        seeds = [b"pool_account".as_ref(), pool.key().as_ref(), user.key().as_ref()],
         bump = pool_account.bump,
         constraint = pool_account.owner == user.key()
     )]

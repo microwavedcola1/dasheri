@@ -7,7 +7,7 @@ use crate::pool::state::{Pool, PoolAccount};
 pub struct PoolCreatePoolAccount<'info> {
     #[account(
         init,
-        seeds = [b"pool_account".as_ref(), pool.key().as_ref()],
+        seeds = [b"pool_account".as_ref(), pool.key().as_ref(), user.key().as_ref()],
         bump = bump,
         payer = user
     )]

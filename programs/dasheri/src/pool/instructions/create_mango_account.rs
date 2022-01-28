@@ -9,6 +9,8 @@ pub struct PoolCreateMangoAccount<'info> {
     pub mango_program: AccountInfo<'info>,
     #[account(mut)]
     pub mango_group: AccountInfo<'info>,
+
+    // Note: seed contraint checkw will be done in mango
     #[account(mut)]
     pub mango_account: AccountInfo<'info>,
 

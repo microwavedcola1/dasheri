@@ -13,16 +13,18 @@ pub struct IouInitGateway<'info> {
     )]
     pub gateway: Box<Account<'info, Gateway>>,
 
+    // todo: create mint for borrowing iou
     /// The mint for iou which will represent user deposits
     #[account(
         init,
+        mint::decimals = token_mint.decimals,
+        mint::authority = gateway,
+        mint::freeze_authority = gateway,
         seeds = [token_mint.key().as_ref()],
         bump = deposit_iou_mint_bump,
-        payer = admin,
-        owner = token::ID,
-        space = Mint::LEN
+        payer = admin
     )]
-    pub deposit_iou_mint: AccountInfo<'info>,
+    pub deposit_iou_mint: Box<Account<'info, Mint>>,
 
     /// The mint for the token deposited via the gateway
     pub token_mint: Account<'info, Mint>,
@@ -34,40 +36,11 @@ pub struct IouInitGateway<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-impl<'info> IouInitGateway<'info> {
-    fn init_deposit_iou_mint_context(
-        &self,
-    ) -> CpiContext<'_, '_, '_, 'info, InitializeMint<'info>> {
-        CpiContext::new(
-            self.token_program.to_account_info(),
-            InitializeMint {
-                mint: self.deposit_iou_mint.clone(),
-                rent: self.rent.to_account_info(),
-            },
-        )
-    }
-
-    fn init_mint(&self) -> ProgramResult {
-        token::initialize_mint(
-            self.init_deposit_iou_mint_context(),
-            self.token_mint.decimals,
-            &self.gateway.key(),
-            Some(&self.gateway.key()),
-        )?;
-
-        // todo: create mint for borrowing iou
-
-        Ok(())
-    }
-}
-
 pub fn handler(
     ctx: Context<IouInitGateway>,
     gateway_bump: u8,
     deposit_iou_mint_bump: u8,
 ) -> ProgramResult {
-    ctx.accounts.init_mint();
-
     let gateway = &mut ctx.accounts.gateway;
     gateway.token_mint = ctx.accounts.token_mint.key();
     gateway.bump = gateway_bump;
