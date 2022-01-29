@@ -18,10 +18,10 @@ default = []
 test-bpf = []
 
 [dependencies]
-#anchor-lang = {version= "^0.20.1", features=["anchor-debug"]}
-#anchor-spl = {version= "^0.20.1"}
-anchor-lang = { path = "../../../anchor/lang", features=["anchor-debug"]}
-anchor-spl = { path = "../../../anchor/spl"}
+anchor-lang = {version= "^0.20.1", features=["anchor-debug"]}
+anchor-spl = {version= "^0.20.1"}
+#anchor-lang = { path = "../../../anchor/lang", features=["anchor-debug"]}
+#anchor-spl = { path = "../../../anchor/spl"}
 solana-program = "^1.8.5"
 spl-token = { version = "3.1.1", features = ["no-entrypoint"] }
 mango = { git = "https://github.com/blockworks-foundation/mango-v3.git", default-features = false, features = ["no-entrypoint"], branch = "ckamm/payer-for-pda" }
