@@ -113,6 +113,8 @@ pub fn handler(ctx: Context<IouDepositIntoMangoAccount>, quantity: u64) -> Progr
             ctx.accounts.gateway.admin.key().as_ref(),
             &[ctx.accounts.gateway.bump],
         ]]),
+        // todo: quantity should be based on current deposit index for corresponding asset
+        // this is just an over simplification using quantity as is
         quantity,
     )?;
 
