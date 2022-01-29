@@ -35,3 +35,14 @@ Use cases
 * pool - pooled market making, pooled liquidator which can liquidate other large accounts
 * iou - iou tokens via a gateway to mango's borrowing and lending
 
+
+## Development
+```
+➜  dasheri git:(main) ✗ rustc --version
+rustc 1.57.0 (f1edd0429 2021-11-29)
+➜  dasheri git:(main) ✗ solana --version
+solana-cli 1.8.5 (src:76c5c94a; feat:52865992)
+```
+
+## Testing
+* test_pool.rs and test_iou.rs are full integration tests, which do a full mango, serum and then dasheri setup.
