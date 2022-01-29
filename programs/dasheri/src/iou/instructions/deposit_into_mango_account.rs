@@ -41,6 +41,8 @@ pub struct IouDepositIntoMangoAccount<'info> {
 
     pub token_mint: Account<'info, Mint>,
 
+    // todo: be careful with using init_if_needed, ideally split creation of deposit_iou_account
+    // into another ix
     #[account(
         init_if_needed,
         associated_token::authority = payer,
