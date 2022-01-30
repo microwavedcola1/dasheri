@@ -118,5 +118,8 @@ pub fn handler(ctx: Context<IouDepositIntoMangoAccount>, quantity: u64) -> Progr
         quantity,
     )?;
 
+    // note: to compute how interest rate could be computed, see...
+    // https://github.com/blockworks-foundation/mango-v3/blob/3583fa19a909aaa4113bcdb23b35c5bede6866ae/program/src/state.rs#L410
+
     Ok(())
 }
