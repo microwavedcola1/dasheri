@@ -35,11 +35,11 @@ pub fn handler(ctx: Context<PoolCreateMangoAccount>, account_num: u64, bump: u8)
 
     let instruction = instruction::create_mango_account(
         ctx.accounts.mango_program.key,
-        ctx.accounts.mango_group.to_account_info().key,
-        ctx.accounts.mango_account.to_account_info().key,
-        ctx.accounts.pool.to_account_info().key,
-        ctx.accounts.system_program.to_account_info().key,
-        ctx.accounts.payer.to_account_info().key,
+        &ctx.accounts.mango_group.key(),
+        &ctx.accounts.mango_account.key(),
+        &ctx.accounts.pool.key(),
+        &ctx.accounts.system_program.key(),
+        &ctx.accounts.payer.key(),
         account_num,
     )
     .unwrap();
