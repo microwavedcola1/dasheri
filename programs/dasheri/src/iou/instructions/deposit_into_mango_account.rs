@@ -5,6 +5,7 @@ use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token::accessor::amount;
 use anchor_spl::token::{self, Mint, MintTo, Token, TokenAccount};
 use mango::instruction;
+use mango::state::MangoAccount;
 use solana_program::program::invoke;
 
 #[derive(Accounts)]
@@ -76,6 +77,8 @@ impl<'info> IouDepositIntoMangoAccount<'info> {
 pub fn handler(ctx: Context<IouDepositIntoMangoAccount>, quantity: u64) -> ProgramResult {
     require!(ctx.accounts.mango_program.executable, NotAProgram);
 
+    log_deposits(&ctx, "mango_account deposits before deposit");
+
     let instruction = instruction::deposit(
         &ctx.accounts.mango_program.key(),
         &ctx.accounts.mango_group.key(),
@@ -107,6 +110,8 @@ pub fn handler(ctx: Context<IouDepositIntoMangoAccount>, quantity: u64) -> Progr
         ],
     )?;
 
+    log_deposits(&ctx, "mango_account deposits after deposit");
+
     token::mint_to(
         ctx.accounts.iou_mint_context().with_signer(&[&[
             "gateway".as_ref(),
@@ -122,4 +127,16 @@ pub fn handler(ctx: Context<IouDepositIntoMangoAccount>, quantity: u64) -> Progr
     // https://github.com/blockworks-foundation/mango-v3/blob/3583fa19a909aaa4113bcdb23b35c5bede6866ae/program/src/state.rs#L410
 
     Ok(())
+}
+
+fn log_deposits(ctx: &Context<IouDepositIntoMangoAccount>, msg_string: &'static str) {
+    let mango_account_deposits = MangoAccount::load_checked(
+        &ctx.accounts.mango_account.to_account_info(),
+        ctx.accounts.mango_program.key,
+        ctx.accounts.mango_group.key,
+    )
+    .unwrap()
+    .deposits;
+
+    msg!("{:?} {:?}", msg_string, mango_account_deposits);
 }
